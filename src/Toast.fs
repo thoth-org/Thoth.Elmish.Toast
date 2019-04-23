@@ -480,7 +480,7 @@ module Toast =
                 span [ Class "toast-message" ]
                     [ str txt ]
             member __.SplittedLayout iconView title message =
-                div [ Style [ Display Display.Flex
+                div [ Style [ Display DisplayOptions.Flex
                               Width "100%" ] ]
                     [ iconView
                       div [ Class "toast-layout-content" ]
