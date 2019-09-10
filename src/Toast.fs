@@ -436,7 +436,7 @@ module Toast =
                             subscribe model.UserModel |> Cmd.map UserMsg ]
 
             let mapView view' model dispatch =
-                div [ ]
+                fragment [ ]
                     [ view renderer model dispatch
                       view' model.UserModel (UserMsg >> dispatch) ]
 
