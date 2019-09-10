@@ -1,0 +1,15 @@
+group Demo
+    FSharp.Core
+    Fable.Core
+    Fable.Elmish
+    Fable.Elmish.React
+    Fable.Elmish.Browser
+    Fable.Promise
+    Fable.React
+    Fulma
+    Fulma.Extensions.Wikiki.Tooltip
+    Fulma.Extensions.Wikiki.Switch
+    Fulma.Extensions.Wikiki.Checkradio
+    Fable.FontAwesome
+    Fable.FontAwesome.Free
+    Fable.Browser.Dom

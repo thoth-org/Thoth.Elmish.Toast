@@ -6,3 +6,43 @@ nuget Fable.Core
 nuget Fable.Elmish
 nuget Fable.React
 nuget Fable.Promise
+
+group Demo
+    source https://www.nuget.org/api/v2
+    framework: netstandard2.0
+    nuget FSharp.Core redirects:force, content:none
+    nuget Fable.Core
+    nuget Fable.Elmish
+    nuget Fable.Elmish.React
+    nuget Fable.Elmish.Browser
+    nuget Fable.Promise
+    nuget Fable.React
+    nuget Fulma
+    nuget Fulma.Extensions.Wikiki.Tooltip
+    nuget Fulma.Extensions.Wikiki.Switch
+    nuget Fulma.Extensions.Wikiki.Checkradio
+    nuget Fable.FontAwesome
+    nuget Fable.FontAwesome.Free
+    nuget Fable.Browser.Dom
+
+group Grammars
+
+    github akamud/vscode-theme-onelight themes/OneLight.json
+    github ionide/ionide-fsgrammar grammar/fsharp.json
+
+
+group netcorebuild
+    source https://www.nuget.org/api/v2
+    framework: netstandard2.0
+
+    nuget NETStandard.Library.NETFramework
+    nuget Fake.DotNet.Cli
+    nuget Fake.DotNet.Paket
+    nuget Fake.Core.Process
+    nuget Fake.Core.String
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.IO.FileSystem
+    nuget Fake.Tools.Git
+    nuget Fake.JavaScript.Yarn
+    nuget Fake.Api.GitHub
+    nuget BlackFox.Fake.BuildTask

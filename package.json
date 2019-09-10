@@ -1,8 +1,14 @@
 {
     "private": true,
     "devDependencies": {
+        "bulma-checkradio": "^1.1.1",
+        "bulma-switch": "^2.0.0",
+        "bulma-tooltip": "^2.0.2",
         "chalk": "^2.4.2",
         "changelog-parser": "^2.7.0",
+        "nacara": "^0.2.1",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0",
         "request": "^2.88.0",
         "request-promise-native": "^1.0.7",
         "shelljs": "^0.8.3",
