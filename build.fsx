@@ -95,7 +95,7 @@ let yarnInstall = BuildTask.create "YarnInstall" [ ] {
     Yarn.install (yarnWorkDir "demo")
 }
 
-let dotnetRestore = BuildTask.create "DotnetRestore" [ clean ] {
+let dotnetRestore = BuildTask.create "DotnetRestore" [ ] {
     DotNet.restore id projectFile
     DotNet.restore id demoFile
 }
@@ -104,7 +104,7 @@ let watchDemo = BuildTask.create "WatchDemo" [ yarnInstall; dotnetRestore ] {
     Yarn.exec "webpack-dev-server" (yarnWorkDir "demo")
 }
 
-let buildDemo = BuildTask.create "BuildDemo" [ clean; dotnetRestore ] {
+let buildDemo = BuildTask.create "BuildDemo" [ clean.IfNeeded; yarnInstall; dotnetRestore ] {
     Yarn.exec "webpack" (yarnWorkDir "demo")
 }
 
@@ -242,5 +242,8 @@ let _watchDocs = BuildTask.create "WatchDocs" [ copyDemoFiles ] {
 let _publishDocs = BuildTask.create "PublishDocs" [ buildDocs ] {
     Yarn.exec "gh-pages -d docs_deploy" id
 }
+
+// Not yet used, we don't have a CI on this project
+let _ci = BuildTask.createEmpty "CI" [ clean; buildDocs ]
 
 BuildTask.runOrDefault watchDemo

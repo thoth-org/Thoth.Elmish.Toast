@@ -6,6 +6,7 @@
         "bulma-tooltip": "^2.0.2",
         "chalk": "^2.4.2",
         "changelog-parser": "^2.7.0",
+        "gh-pages": "^2.1.1",
         "nacara": "^0.2.1",
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
