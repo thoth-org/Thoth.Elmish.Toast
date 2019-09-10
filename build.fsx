@@ -196,7 +196,8 @@ let pushNuget (newVersion: string) (projFile: string) =
         Paket.pushFiles (fun o ->
             { o with ApiKey = nugetKey
                      PublishUrl = "https://www.nuget.org/api/v2/package"
-                     WorkingDir = __SOURCE_DIRECTORY__ })
+                     WorkingDir = __SOURCE_DIRECTORY__
+                     ToolPath = ".paket/paket.exe" })
             files
 
 let publish = BuildTask.create "Publish" [ clean; dotnetRestore ] {
