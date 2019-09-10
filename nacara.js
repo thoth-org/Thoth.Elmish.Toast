@@ -61,7 +61,7 @@ module.exports = {
     editUrl: "https://github.com/thoth-org/Thoth.Elmish.Toast/edit/master/docs",
     title: "Thoth.Elmish.Toast",
     debug: true,
-    version: "1.1.0",
+    version: "2.1.0",
     navbar: {
         showVersion: true,
         links: [
