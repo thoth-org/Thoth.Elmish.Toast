@@ -50,8 +50,8 @@ Examples:
 
 | Name | F# code | CSS code |
 |---|---|---|
-| Default | [F# code](https://github.com/MangelMaxime/Thoth/blob/master/src/Thoth.Elmish.Toast/Toast.fs#L442-L481) | [CSS code](https://github.com/MangelMaxime/Thoth/blob/master/src/Thoth.Elmish.Toast/css/toast-minimal.css) |
-| Fulma | [F# code](https://github.com/MangelMaxime/Thoth/blob/master/demos/Thoth.Elmish.Demo/src/Toast.fs#L25-L79) | [CSS code](https://github.com/MangelMaxime/Thoth/blob/master/demos/Thoth.Elmish.Demo/src/scss/toast.scss) |
+| Default | [F# code](https://github.com/MangelMaxime/Thoth/blob/master/src/Thoth.Elmish.Toast/Toast.fs#L442-L481) | [CSS code](https://github.com/thoth-org/Thoth.Elmish.Toast/blob/2.0.0/src/css/toast-minimal.css) |
+| Fulma | [F# code](https://github.com/thoth-org/Thoth.Elmish.Toast/blob/2.0.0/demo/src/Toast.fs#L24-L78) | [CSS code](https://github.com/MangelMaxime/Thoth/blob/master/demos/Thoth.Elmish.Demo/src/scss/toast.scss) |
 
 ## API
 

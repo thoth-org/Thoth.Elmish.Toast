@@ -7,11 +7,11 @@ layout: demo
 
 <div class="has-text-centered">
 
-*[View the code](https://github.com/MangelMaxime/Thoth/blob/master/demos/Thoth.Elmish.Demo/src/Toast.fs)*
+*[View the code](https://github.com/thoth-org/Thoth.Elmish.Toast/blob/2.0.0/demo/src/Toast.fs)*
 </div>
 
-<script type="text/javascript" src="demo/vendors.js"></script>
-<script type="text/javascript" src="demo/demo.js"></script>
+<script type="text/javascript" src="/Thoth.Elmish.Toast/demo/vendors.js"></script>
+<script type="text/javascript" src="/Thoth.Elmish.Toast/demo/demo.js"></script>
 <script type="text/javascript">
     startDemo("toast_demo");
 </script>
