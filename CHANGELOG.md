@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## 2.1.0 - 2019-09-10
+
+### Changed
+
+* Prevents adding an extra div (by @alfonsogarciacaro)
+
 ## 2.0.0 - 2019-04-23
 
 ### Changed

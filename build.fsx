@@ -95,7 +95,7 @@ let yarnInstall = BuildTask.create "YarnInstall" [ ] {
     Yarn.install (yarnWorkDir "demo")
 }
 
-let dotnetRestore = BuildTask.create "DotnetRestore" [ ] {
+let dotnetRestore = BuildTask.create "DotnetRestore" [ clean.IfNeeded ] {
     DotNet.restore id projectFile
     DotNet.restore id demoFile
 }
@@ -199,7 +199,7 @@ let pushNuget (newVersion: string) (projFile: string) =
                      WorkingDir = __SOURCE_DIRECTORY__ })
             files
 
-let publish = BuildTask.create "Publish" [ dotnetRestore ] {
+let publish = BuildTask.create "Publish" [ clean; dotnetRestore ] {
     let version = getLastVersion()
 
     pushNuget version projectFile
