@@ -8,8 +8,6 @@ Any time you want to send a toast you need to follow these rules:
 2. Pipe any number of [Builders](./#builder) you want
 3. Use one of the [Triggers ](./#trigger)to set its [Status ](./#status)and send it
 
-You can use the interactive [Demo](https://thoth-org.github.io/Thoth.Elmish.Toast/demo.html) to see how you can combine the different builders together. 
-
 ## Status
 
 ```fsharp
