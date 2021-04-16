@@ -10,6 +10,9 @@ open Fulma.Extensions.Wikiki
 open System
 open Fable.Import
 open Fable.Core
+open Fable.Core.JsInterop
+
+importSideEffects "./scss/main.scss"
 
 module CopyButton =
 
@@ -519,25 +522,21 @@ let private view model dispatch =
             [ viewBuilder model dispatch
               viewCode model ] ]
 
-open Elmish.React
-open Toast
-
-
 // This function is just for the demonstration usage
 // It's allow us to switch the renderer used based on the URL params
 let chooseRenderer =
     let search = Browser.Dom.window.location.search
     if search.Length = 0 || search.Contains("fulma") then
-        renderToastWithFulma :?> IRenderer<string>
+        renderToastWithFulma :?> Toast.IRenderer<string>
     else
         Toast.render
 
-let start (id : string) =
-    Program.mkProgram init update view
-    |> Program.withToast chooseRenderer
-    |> Program.withReactSynchronous id
-    |> Program.run
 
-open Fable.Core.JsInterop
+open Elmish.React
+open Elmish.HMR
+open Toast
 
-Browser.Dom.window?startDemo <- start
+Program.mkProgram init update view
+|> Program.withToast chooseRenderer
+|> Program.withReactBatched "toast_demo"
+|> Program.run

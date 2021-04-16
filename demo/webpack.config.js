@@ -1,5 +1,7 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require("path")
+const webpack = require("webpack")
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 function resolve(filePath) {
     return path.join(__dirname, filePath)
@@ -20,94 +22,74 @@ var babelOptions = {
     ]
 };
 
-var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
-console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
+module.exports = (_env, options) => {
 
-var commonPlugins = [
-];
+    var isDevelopment = options.mode === "development";
 
-module.exports = {
-    devtool: undefined,
-    entry: isProduction ? // We don't use the same entry for dev and production, to make HMR over style quicker for dev env
-        {
-            // We don't output style because it's already included by the docs
+    return {
+        entry: {
             demo: [
                 "@babel/polyfill",
-                './Demo.fsproj'
-            ]
-        } : {
-            demo: [
-                "@babel/polyfill",
-                './Demo.fsproj',
-                './src/scss/main.scss'
+                './fableBuild/App.js'
             ]
         },
-    mode: isProduction ? "production" : "development",
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /node_modules/,
-                    name: "vendors",
-                    chunks: "all"
-                }
-            }
+        mode: isDevelopment ? "development" : "production",
+        output: {
+            path: resolve('./output'),
+            filename: isDevelopment ? '[name].js' : '[name].[fullhash].js',
         },
-    },
-    output: {
-        path: resolve('./output'),
-        filename: '[name].js'
-    },
-    plugins: isProduction ?
-        commonPlugins
-        : commonPlugins.concat([
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.NamedModulesPlugin()
-        ]),
-    devServer: {
-        contentBase: './html/',
-        publicPath: "/",
-        port: 8080,
-        hot: true,
-        inline: true
-    },
-    module: {
-        rules: [
-            {
-                test: /\.fs(x|proj)?$/,
-                use: {
-                    loader: "fable-loader",
-                    options: {
-                        babel: babelOptions,
-                        define: isProduction ? [] : ["DEBUG"],
-                        extra: { optimizeWatch: true }
+        devtool: undefined,
+        optimization: {
+            // Split the code coming from npm packages into a different file.
+            // 3rd party dependencies change less often, let the browser cache them.
+            splitChunks: {
+                cacheGroups: {
+                    commons: {
+                        test: /node_modules/,
+                        name: "vendors",
+                        chunks: "all"
                     }
                 }
             },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: babelOptions
+        },
+        plugins:
+            [
+                new HtmlWebpackPlugin({
+                    filename: "./index.html",
+                    template: "./src/index.html"
+                }),
+                new MiniCssExtractPlugin()
+            ].filter(Boolean),
+        devServer: {
+            contentBase: resolve("public"),
+            publicPath: "/",
+            port: 8080,
+            hot: true,
+            inline: true
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: babelOptions
+                    },
                 },
-            },
-            {
-                test: /\.(sass|scss)$/,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader',
-                ],
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
-            {
-                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
-                use: ["file-loader"]
-            }
-        ]
+                {
+                    test: /\.(sass|scss|css)$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'sass-loader',
+                    ],
+                },
+                {
+                    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+                    use: ["file-loader"]
+                }
+            ]
+        }
     }
-};
+}

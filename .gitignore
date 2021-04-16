@@ -48,3 +48,5 @@ docs_deploy/
 .ionide/
 
 demo/output/
+
+fableBuild/
