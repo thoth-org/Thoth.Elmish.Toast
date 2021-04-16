@@ -16,8 +16,6 @@ importSideEffects "./scss/main.scss"
 
 module CopyButton =
 
-    open Fable.Core.JsInterop
-
     type Props =
         | Value of string
 
