@@ -66,47 +66,107 @@ module Toast =
           WithProgressBar : bool
           WithCloseButton : bool }
 
+    /// <summary>
     /// Create a toast and set the message content
-    let message msg =
-        { Builder<_, _>.Empty() with Message = msg }
+    /// </summary>
+    /// <param name="msg">Message to display in the toast</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let message msg : Builder<'icon, 'msg> =
+        { Builder<'icon, 'msg>.Empty() with Message = msg }
 
+    /// <summary>
     /// Set the title content
-    let title title (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="title">Title to display in the toast</param>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let title title (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Title = Some title }
 
+    /// <summary>
     /// Set the position
-    let position pos (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="pos">Position where the toast will be positionned</param>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let position pos (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Position = pos }
 
+    /// <summary>
     /// Add an input to the toast
-    let addInput txt msg (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="txt"></param>
+    /// <param name="msg"></param>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <returns></returns>
+    let addInput txt msg (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Inputs = (txt, msg) :: builder.Inputs }
 
+    /// <summary>
     /// Set the icon
-    let icon icon (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="icon">Icon which will be shown in the icon section of the toast</param>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let icon icon (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Icon = Some icon }
 
+    /// <summary>
     /// Set the timeout in seconds
-    let timeout delay (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="delay">Dely in second after which the toast will be removed</param>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let timeout delay (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Delay = Some delay }
 
+    /// <summary>
     /// No timeout, make sure to add close button or dismiss on click
-    let noTimeout (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let noTimeout (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Delay = None }
 
+    /// <summary>
     /// Allow user to dismiss the toast by cliking on it
-    let dismissOnClick (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let dismissOnClick (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with DismissOnClick = true }
 
     /// Add an animated progress bar
-    // let withProgessBar (builder : Builder<_, _>) =
+    // let withProgessBar (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
     //     { builder with WithProgressBar = true }
 
+    /// <summary>
     /// Add a close button
-    let withCloseButton (builder : Builder<_, _>) =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let withCloseButton (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with WithCloseButton = true }
 
-    let private triggerEvent (builder : Builder<_, _>) status dispatch =
+    let private triggerEvent (builder : Builder<'icon, 'msg>) status dispatch =
         let detail =
             jsOptions<CustomEventInit>(fun o ->
                 o.detail <-
@@ -130,128 +190,126 @@ module Toast =
         window.dispatchEvent(event)
         |> ignore
 
+
+    /// <summary>
     /// Send the toast marked with Success status
-    let success (builder : Builder<_, _>) : Cmd<'msg> =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let success (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
         [ fun dispatch ->
             triggerEvent builder Success dispatch ]
 
+
+    /// <summary>
     /// Send the toast marked with Warning status
-    let warning (builder : Builder<_, _>) : Cmd<'msg> =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let warning (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
         [ fun dispatch ->
             triggerEvent builder Warning dispatch ]
 
+    /// <summary>
     /// Send the toast marked with Error status
-    let error (builder : Builder<_, _>) : Cmd<'msg> =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let error (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
         [ fun dispatch ->
             triggerEvent builder Error dispatch ]
 
+    /// <summary>
     /// Send the toast marked with Info status
-    let info (builder : Builder<_, _>) : Cmd<'msg> =
+    /// </summary>
+    /// <param name="builder">Toast builder to which we want to apply the function</param>
+    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
+    /// <returns></returns>
+    let info (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
         [ fun dispatch ->
             triggerEvent builder Info dispatch ]
 
+    /// <summary>
     /// Interface used to customize the view
+    /// </summary>
     type IRenderer<'icon> =
 
-        /// **Description**
+        /// <summary>
         /// Render the outer element of the toast
-        /// **Parameters**
-        /// * `content` - parameter of type `ReactElement list`
-        ///     > This is the content of the toast.
-        ///     > Ex:
-        ///     >   - CloseButton
-        ///     >   - Title
-        ///     >   - Message
-        /// * `color` - parameter of type `string`
-        ///     > Class used to set toast color
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract Toast : ReactElement list -> string -> ReactElement
+        /// </summary>
+        /// <param name="content">This is the content of the toast</param>
+        /// <param name="color">Class used to set the toast color</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract Toast : content : ReactElement list -> color : string -> ReactElement
 
-        /// **Description**
+        /// <summary>
         /// Render the close button of the toast
-        /// **Parameters**
-        /// * `onClick` - parameter of type `MouseEvent -> unit`
-        ///     > OnClick event listener to attached
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract CloseButton : (MouseEvent -> unit) -> ReactElement
+        /// </summary>
+        /// <param name="onClick">Event listener to attached</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract CloseButton : onClick : (MouseEvent -> unit) -> ReactElement
 
-        /// **Description**
-        /// Render the outer element of the Input Area
-        /// **Parameters**
-        /// * `content` - parameter of type `ReactElement list`
-        ///     > This is the content of the input area.
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract InputArea : ReactElement list -> ReactElement
+        /// <summary>
+        /// Render the title of the toast
+        /// </summary>
+        /// <param name="text">Text to display</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract Title : text : string -> ReactElement
 
-        /// **Description**
-        /// Render one element of the Input Area
-        /// **Parameters**
-        /// * `text` - parameter of type `string`
-        ///     > Text to display
-        /// * `callback` - parameter of type `unit -> unit`
-        ///     > Callback to execute when user click on the input
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract Input : string -> (unit -> unit) -> ReactElement
+        /// <summary>
+        /// Render the message of the toast
+        /// </summary>
+        /// <param name="text">Text to display</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract Message : text : string -> ReactElement
 
-        /// **Description**
-        /// Render the title of the Toast
-        /// **Parameters**
-        /// * `text` - parameter of type `string`
-        ///     > Text to display
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract Title : string -> ReactElement
 
-        /// **Description**
-        /// Render the message of the Toast
-        /// **Parameters**
-        /// * `text` - parameter of type `string`
-        ///     > Text to display
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract Message : string -> ReactElement
-
-        /// **Description**
+        /// <summary>
         /// Render the icon part
-        /// **Parameters**
-        /// * `icon` - parameter of type `'icon`
-        ///     > 'icon is generic so you can pass the Value as a String or Typed value like `Fa.I.FontAwesomeIcons` when using Fulma
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract Icon : 'icon -> ReactElement
+        /// </summary>
+        /// <param name="icon">Icon to use</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract Icon : icon : 'icon -> ReactElement
 
-        /// **Description**
+        /// <summary>
         /// Render the simple layout (when no icon has been provided to the Toast)
-        /// **Parameters**
-        /// * `title` - parameter of type `ReactElement`
-        /// * `message` - parameter of type `ReactElement`
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract SingleLayout : ReactElement -> ReactElement -> ReactElement
+        /// </summary>
+        /// <param name="titleElement">React element representing the tile part of the toast</param>
+        /// <param name="messageElement">React element representing the message part of the toast</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract SingleLayout : titleElement : ReactElement -> messageElement : ReactElement -> ReactElement
 
 
-        /// **Description**
+        /// <summary>
         /// Render the splitted layout (when toast has an Icon and Message)
-        /// **Parameters**
-        /// * `icon` - parameter of type `ReactElement`
-        ///     > Icon view
-        /// * `title` - parameter of type `ReactElement`
-        /// * `message` - parameter of type `ReactElement`
-        /// **Output Type**
-        ///   * `ReactElement`
-        abstract SplittedLayout : ReactElement -> ReactElement -> ReactElement -> ReactElement
+        /// </summary>
+        /// <param name="iconElement">React element representing the icon part of the toast</param>
+        /// <param name="titleElement">React element representing the tile part of the toast</param>
+        /// <param name="messageElement">React element representing the message part of the toast</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns></returns>
+        abstract SplittedLayout : iconElement : ReactElement -> titleElement : ReactElement -> messageElement : ReactElement -> ReactElement
 
-        /// **Description**
+        /// <summary>
         /// Obtain the class associated with the Status
-        /// **Parameters**
-        /// * `status` - parameter of type `Status`
-        /// **Output Type**
-        ///   * `string`
-        abstract StatusToColor : Status -> string
+        /// </summary>
+        /// <param name="status">Status value to convert</param>
+        /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
+        /// <returns>The CSS class associated with the Status</returns>
+        abstract StatusToColor : status : Status -> string
 
     [<RequireQualifiedAccess>]
     module Program =
@@ -283,19 +341,6 @@ module Toast =
                                     render.Title
                                     n.Title
 
-                            let withInputArea, inputArea =
-                                if n.Inputs.Length = 0 then
-                                    "", None
-                                else
-                                    let inputs =
-                                        render.InputArea
-                                            (n.Inputs
-                                                |> List.map (fun (txt, callback) ->
-                                                    render.Input txt callback
-                                                ))
-
-                                    "with-inputs", Some inputs
-
                             let dismissOnClick =
                                 if n.DismissOnClick then
                                     "dismiss-on-click"
@@ -305,7 +350,6 @@ module Toast =
                             let containerClass =
                                 String.concat " " [ "toast-container"
                                                     dismissOnClick
-                                                    withInputArea
                                                     render.StatusToColor n.Status ]
                             let closeButton =
                                 match n.WithCloseButton with
@@ -334,8 +378,7 @@ module Toast =
                                     [ closeButton
                                       layout
                                     ]
-                                    (render.StatusToColor n.Status)
-                                  ofOption inputArea ]
+                                    (render.StatusToColor n.Status) ]
                         ) )
 
         let private view  (render : IRenderer<_>) (model : Model<_, _>) dispatch =
@@ -445,12 +488,12 @@ module Toast =
 
             Program.map mapInit mapUpdate mapView mapSetState mapSubscribe program
 
-    /// **Description**
-    /// Default implementation for the Toast renderer,
-    /// you are encourage to write your own implementation
-    /// to match your application style
-    /// **Output Type**
-    ///   * `IRenderer<string>`
+    /// <summary>
+    /// Default implementation for the Toast renderer.
+    ///
+    /// <para>you are encourage to write your own implementation to match your application style</para>
+    /// </summary>
+    /// <returns></returns>
     let render =
         { new IRenderer<string> with
             member __.Toast children _ =
@@ -460,12 +503,6 @@ module Toast =
                 span [ Class "close-button"
                        OnClick onClick ]
                     [ ]
-            member __.InputArea children =
-                div [ ]
-                    [ str "Not implemented yet" ]
-            member __.Input (txt : string) (callback : (unit -> unit)) =
-                div [ ]
-                    [ str "Not implemented yet" ]
             member __.Title txt =
                 span [ Class "toast-title" ]
                     [ str txt ]
