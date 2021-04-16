@@ -34,18 +34,6 @@ let renderToastWithFulma =
                 Notification.delete [ Props [ OnClick onClick ] ]
                     [ ]
 
-            member __.InputArea children =
-                Columns.columns [ Columns.IsGapless
-                                  Columns.Modifiers [ Modifier.TextAlignment (Screen.All, TextAlignment.Centered) ]
-                                  Columns.CustomClass "notify-inputs-area" ]
-                    children
-
-            member __.Input (txt : string) (callback : (unit -> unit)) =
-                Column.column [ ]
-                    [ Button.button [ Button.OnClick (fun _ -> callback ())
-                                      Button.Color IsWhite ]
-                        [ str txt ] ]
-
             member __.Title txt =
                 Heading.h5 []
                            [ str txt ]
