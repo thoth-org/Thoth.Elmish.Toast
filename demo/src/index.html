@@ -9,9 +9,60 @@
     <link rel="shortcut icon" type="image/png" href="img/favicon-16x16.ico" sizes="16x16" />
 </head>
 
-<body>
+<body class="has-navbar-fixed-top">
+    <nav class="navbar is-primary is-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item title is-4" href="https://thoth-org.github.io//Thoth.Elmish.Toast/">Thoth.Elmish.Toast</a>
+                <a class="navbar-item is-hidden-desktop" href="https://thoth-org.gitbook.io/thoth-elmish-toast/" target="_self">
+                    <span class="icon"><i class="fas fa-book fa-lg"></i></span><span>Documentation</span>
+                </a>
+                <a class="navbar-item is-hidden-desktop" href="https://github.com/thoth-org/Thoth.Elmish.Toast" target="_blank">
+                    <span class="icon"><i class="fab fa-github fa-lg"></i></span>
+                </a>
+                <a class="navbar-item is-hidden-desktop" href="https://twitter.com/MangelMaxime" target="_blank"
+                    style="color:#55acee">
+                    <span class="icon"><i class="fab fa-twitter fa-lg"></i></span>
+                </a>
+            </div>
+            <div class="navbar-menu" id="nav-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="https://thoth-org.gitbook.io/thoth-elmish-toast/" target="_self">
+                        <span class="icon"><i class="fas fa-book fa-lg"></i></span><span>Documentation</span>
+                    </a>
+                    <a class="navbar-item" href="https://github.com/thoth-org/Thoth.Elmish.Toast" target="_blank">
+                        <span class="icon"><i class="fab fa-github fa-lg"></i></span>
+                    </a>
+                    <a class="navbar-item" href="https://twitter.com/MangelMaxime" target="_blank"
+                        style="color:#55acee">
+                        <span class="icon"><i class="fab fa-twitter fa-lg"></i></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="container">
-        <div id="toast_demo"></div>
+        <div>
+            <div class="content container is-hidden-touch">
+                <div id="toast_demo"></div>
+            </div>
+
+            <section class="hero is-fullheight has-text-centered is-hidden-desktop">
+                <div class="hero-body">
+                    <div class="container">
+                        <article class="message is-danger">
+                            <div class="message-header">
+                                <p>Unsupported device</p>
+                            </div>
+                            <div class="message-body">
+                                Sorry, the demo is only availble from a desktop
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+
     </div>
 </body>
 

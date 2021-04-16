@@ -207,14 +207,6 @@ let private buildDismissOnClick (step : Step) =
     else
         step
 
-// let private buildWithProgressBar (step : Step) =
-//     if step.Model.WithProgressBar then
-//         step
-//         |> Step.ApplyBuilder Toast.withProgessBar
-//         |> Step.AddCode "Toast.withProgessBar"
-//     else
-//         step
-
 let private buildWithCloseButton (step : Step) =
     if step.Model.WithCloseButton then
         step
