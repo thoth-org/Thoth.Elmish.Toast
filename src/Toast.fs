@@ -38,7 +38,6 @@ module Toast =
           Position : Position
           Delay : TimeSpan option
           DismissOnClick : bool
-          WithProgressBar : bool
           WithCloseButton : bool }
 
         static member Empty () =
@@ -48,7 +47,6 @@ module Toast =
               Delay = Some (TimeSpan.FromSeconds 3.)
               Position = BottomLeft
               DismissOnClick = false
-              WithProgressBar = false
               WithCloseButton = false }
 
     type Toast<'icon> =
@@ -60,7 +58,6 @@ module Toast =
           Delay : TimeSpan option
           Status : Status
           DismissOnClick : bool
-          WithProgressBar : bool
           WithCloseButton : bool }
 
     /// <summary>
@@ -137,10 +134,6 @@ module Toast =
     let dismissOnClick (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with DismissOnClick = true }
 
-    /// Add an animated progress bar
-    // let withProgessBar (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-    //     { builder with WithProgressBar = true }
-
     /// <summary>
     /// Add a close button
     /// </summary>
@@ -163,7 +156,6 @@ module Toast =
                                 Delay = builder.Delay
                                 Status = status
                                 DismissOnClick = builder.DismissOnClick
-                                WithProgressBar = builder.WithProgressBar
                                 WithCloseButton = builder.WithCloseButton })
             )
         let event = CustomEvent.Create(eventIdentifier, detail)
