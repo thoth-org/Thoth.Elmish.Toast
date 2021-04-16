@@ -32,8 +32,7 @@ module Toast =
         | TopCenter
 
     type Builder<'icon, 'msg> =
-        { Inputs : (string * 'msg) list
-          Message : string
+        { Message : string
           Title : string option
           Icon : 'icon option
           Position : Position
@@ -43,8 +42,7 @@ module Toast =
           WithCloseButton : bool }
 
         static member Empty () =
-            { Inputs = []
-              Message = ""
+            { Message = ""
               Title = None
               Icon = None
               Delay = Some (TimeSpan.FromSeconds 3.)
@@ -55,7 +53,6 @@ module Toast =
 
     type Toast<'icon> =
         { Guid : Guid
-          Inputs : (string * (unit -> unit)) list
           Message : string
           Title : string option
           Icon : 'icon option
@@ -97,18 +94,6 @@ module Toast =
     /// <returns></returns>
     let position pos (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
         { builder with Position = pos }
-
-    /// <summary>
-    /// Add an input to the toast
-    /// </summary>
-    /// <param name="txt"></param>
-    /// <param name="msg"></param>
-    /// <param name="builder">Toast builder to which we want to apply the function</param>
-    /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
-    /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
-    /// <returns></returns>
-    let addInput txt msg (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Inputs = (txt, msg) :: builder.Inputs }
 
     /// <summary>
     /// Set the icon
@@ -171,11 +156,6 @@ module Toast =
             jsOptions<CustomEventInit>(fun o ->
                 o.detail <-
                     Some (box { Guid = Guid.NewGuid()
-                                Inputs =
-                                    builder.Inputs
-                                    |> List.map (fun (txt, msg) ->
-                                        txt, fun () -> dispatch msg
-                                    )
                                 Message = builder.Message
                                 Title = builder.Title
                                 Icon = builder.Icon
