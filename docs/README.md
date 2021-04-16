@@ -6,7 +6,7 @@ It also provides a very basic input system. Do not abuse it, a toast should be a
 
 {% embed url="https://thoth-org.github.io/Thoth.Elmish.Toast/demo.html" caption="Go to interactive demo" %}
 
-![Demo overview](.gitbook/assets/image.png)
+![Interactive demo showcase](.gitbook/assets/thoth_toast_demo.gif)
 
 
 
