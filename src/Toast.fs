@@ -10,7 +10,8 @@ module Toast =
     open Browser.Types
     open Elmish
 
-    let [<Fable.Core.Emit("module.hot")>] private hotModule = obj()
+    [<Fable.Core.Emit("module.hot")>]
+    let private hotModule = obj()
 
     importSideEffects "./css/toast-base.css"
     importSideEffects "./css/toast-minimal.css"
@@ -32,33 +33,39 @@ module Toast =
         | TopCenter
 
     type Builder<'icon, 'msg> =
-        { Message : string
-          Title : string option
-          Icon : 'icon option
-          Position : Position
-          Delay : TimeSpan option
-          DismissOnClick : bool
-          WithCloseButton : bool }
+        {
+            Message : string
+            Title : string option
+            Icon : 'icon option
+            Position : Position
+            Delay : TimeSpan option
+            DismissOnClick : bool
+            WithCloseButton : bool
+        }
 
         static member Empty () =
-            { Message = ""
-              Title = None
-              Icon = None
-              Delay = Some (TimeSpan.FromSeconds 3.)
-              Position = BottomLeft
-              DismissOnClick = false
-              WithCloseButton = false }
+            {
+                Message = ""
+                Title = None
+                Icon = None
+                Delay = Some (TimeSpan.FromSeconds 3.)
+                Position = BottomLeft
+                DismissOnClick = false
+                WithCloseButton = false
+            }
 
     type Toast<'icon> =
-        { Guid : Guid
-          Message : string
-          Title : string option
-          Icon : 'icon option
-          Position : Position
-          Delay : TimeSpan option
-          Status : Status
-          DismissOnClick : bool
-          WithCloseButton : bool }
+        {
+            Guid : Guid
+            Message : string
+            Title : string option
+            Icon : 'icon option
+            Position : Position
+            Delay : TimeSpan option
+            Status : Status
+            DismissOnClick : bool
+            WithCloseButton : bool
+        }
 
     /// <summary>
     /// Create a toast and set the message content
@@ -68,7 +75,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let message msg : Builder<'icon, 'msg> =
-        { Builder<'icon, 'msg>.Empty() with Message = msg }
+        { Builder<'icon, 'msg>.Empty()
+            with Message = msg
+        }
 
     /// <summary>
     /// Set the title content
@@ -79,7 +88,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let title title (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Title = Some title }
+        { builder with
+            Title = Some title
+        }
 
     /// <summary>
     /// Set the position
@@ -90,7 +101,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let position pos (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Position = pos }
+        { builder with
+            Position = pos
+        }
 
     /// <summary>
     /// Set the icon
@@ -101,7 +114,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let icon icon (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Icon = Some icon }
+        { builder with
+            Icon = Some icon
+        }
 
     /// <summary>
     /// Set the timeout in seconds
@@ -112,7 +127,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let timeout delay (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Delay = Some delay }
+        { builder with
+            Delay = Some delay
+        }
 
     /// <summary>
     /// No timeout, make sure to add close button or dismiss on click
@@ -122,7 +139,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let noTimeout (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with Delay = None }
+        { builder with
+            Delay = None
+        }
 
     /// <summary>
     /// Allow user to dismiss the toast by cliking on it
@@ -132,7 +151,9 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let dismissOnClick (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with DismissOnClick = true }
+        { builder with
+            DismissOnClick = true
+        }
 
     /// <summary>
     /// Add a close button
@@ -142,23 +163,29 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let withCloseButton (builder : Builder<'icon, 'msg>) : Builder<'icon, 'msg> =
-        { builder with WithCloseButton = true }
+        { builder with
+            WithCloseButton = true
+        }
 
     let private triggerEvent (builder : Builder<'icon, 'msg>) status dispatch =
         let detail =
             jsOptions<CustomEventInit>(fun o ->
                 o.detail <-
-                    Some (box { Guid = Guid.NewGuid()
-                                Message = builder.Message
-                                Title = builder.Title
-                                Icon = builder.Icon
-                                Position = builder.Position
-                                Delay = builder.Delay
-                                Status = status
-                                DismissOnClick = builder.DismissOnClick
-                                WithCloseButton = builder.WithCloseButton })
+                    {
+                        Guid = Guid.NewGuid()
+                        Message = builder.Message
+                        Title = builder.Title
+                        Icon = builder.Icon
+                        Position = builder.Position
+                        Delay = builder.Delay
+                        Status = status
+                        DismissOnClick = builder.DismissOnClick
+                        WithCloseButton = builder.WithCloseButton
+                    }
             )
+
         let event = CustomEvent.Create(eventIdentifier, detail)
+
         window.dispatchEvent(event)
         |> ignore
 
@@ -171,8 +198,10 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let success (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
-        [ fun dispatch ->
-            triggerEvent builder Success dispatch ]
+        [
+            fun dispatch ->
+                triggerEvent builder Success dispatch
+        ]
 
 
     /// <summary>
@@ -183,8 +212,10 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let warning (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
-        [ fun dispatch ->
-            triggerEvent builder Warning dispatch ]
+        [
+            fun dispatch ->
+                triggerEvent builder Warning dispatch
+        ]
 
     /// <summary>
     /// Send the toast marked with Error status
@@ -194,8 +225,10 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let error (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
-        [ fun dispatch ->
-            triggerEvent builder Error dispatch ]
+        [
+            fun dispatch ->
+                triggerEvent builder Error dispatch
+        ]
 
     /// <summary>
     /// Send the toast marked with Info status
@@ -205,8 +238,10 @@ module Toast =
     /// <typeparam name="'msg">The message type associated with this Toast builder</typeparam>
     /// <returns></returns>
     let info (builder : Builder<'icon, 'msg>) : Cmd<'msg> =
-        [ fun dispatch ->
-            triggerEvent builder Info dispatch ]
+        [
+            fun dispatch ->
+                triggerEvent builder Info dispatch
+        ]
 
     /// <summary>
     /// Interface used to customize the view
@@ -262,7 +297,10 @@ module Toast =
         /// <param name="messageElement">React element representing the message part of the toast</param>
         /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
         /// <returns></returns>
-        abstract SingleLayout : titleElement : ReactElement -> messageElement : ReactElement -> ReactElement
+        abstract SingleLayout :
+            titleElement : ReactElement ->
+            messageElement : ReactElement ->
+            ReactElement
 
 
         /// <summary>
@@ -273,7 +311,11 @@ module Toast =
         /// <param name="messageElement">React element representing the message part of the toast</param>
         /// <typeparam name="'icon">The type of Icon used. For example, for FontAwesome you could use Icons represent using CSS string class or types icons using <c>Fa.I.FontAwesomeIcons</c></typeparam>
         /// <returns></returns>
-        abstract SplittedLayout : iconElement : ReactElement -> titleElement : ReactElement -> messageElement : ReactElement -> ReactElement
+        abstract SplittedLayout :
+            iconElement : ReactElement ->
+            titleElement : ReactElement ->
+            messageElement : ReactElement ->
+            ReactElement
 
         /// <summary>
         /// Obtain the class associated with the Status
@@ -293,13 +335,15 @@ module Toast =
             | OnError of exn
 
         type Model<'icon, 'model> =
-            { UserModel : 'model
-              Toasts_BL : Toast<'icon> list
-              Toasts_BC : Toast<'icon> list
-              Toasts_BR : Toast<'icon> list
-              Toasts_TL : Toast<'icon> list
-              Toasts_TC : Toast<'icon> list
-              Toasts_TR : Toast<'icon> list }
+            {
+                UserModel : 'model
+                Toasts_BL : Toast<'icon> list
+                Toasts_BC : Toast<'icon> list
+                Toasts_BR : Toast<'icon> list
+                Toasts_TL : Toast<'icon> list
+                Toasts_TC : Toast<'icon> list
+                Toasts_TR : Toast<'icon> list
+            }
 
         let inline private removeToast guid =
             List.filter (fun item -> item.Guid <> guid )
@@ -352,6 +396,7 @@ module Toast =
                                     ]
                                     (render.StatusToColor n.Status) ]
                         ) )
+
 
         let private view  (render : IRenderer<_>) (model : Model<_, _>) dispatch =
             div [ Class "elmish-toast" ]
@@ -412,13 +457,16 @@ module Toast =
                 newModel, cmd
 
             let createModel (model, cmd) =
-                { UserModel = model
-                  Toasts_BL = []
-                  Toasts_BC = []
-                  Toasts_BR = []
-                  Toasts_TL = []
-                  Toasts_TC = []
-                  Toasts_TR = [] }, cmd
+                {
+                    UserModel = model
+                    Toasts_BL = []
+                    Toasts_BC = []
+                    Toasts_BR = []
+                    Toasts_TL = []
+                    Toasts_TC = []
+                    Toasts_TR = []
+                }
+                , cmd
 
             let notificationEvent (dispatch : Elmish.Dispatch<Notifiable<_, _>>) =
                 // If HMR support is active, then we provide have a custom implementation.
@@ -468,26 +516,33 @@ module Toast =
     /// <returns></returns>
     let render =
         { new IRenderer<string> with
+
             member __.Toast children _ =
                 div [ Class "toast" ]
                     children
+
             member __.CloseButton onClick =
                 span [ Class "close-button"
                        OnClick onClick ]
                     [ ]
+
             member __.Title txt =
                 span [ Class "toast-title" ]
                     [ str txt ]
+
             member __.Icon (icon : string) =
                 div [ Class "toast-layout-icon" ]
                     [ i [ Class ("fa fa-2x " + icon) ]
                         [  ] ]
+
             member __.SingleLayout title message =
                 div [ Class "toast-layout-content" ]
                     [ title; message ]
+
             member __.Message txt =
                 span [ Class "toast-message" ]
                     [ str txt ]
+
             member __.SplittedLayout iconView title message =
                 div [ Style [ Display DisplayOptions.Flex
                               Width "100%" ] ]
@@ -495,9 +550,11 @@ module Toast =
                       div [ Class "toast-layout-content" ]
                         [ title
                           message ] ]
+
             member __.StatusToColor status =
                 match status with
                 | Status.Success -> "is-success"
                 | Status.Warning -> "is-warning"
                 | Status.Error -> "is-error"
-                | Status.Info -> "is-info" }
+                | Status.Info -> "is-info"
+        }
