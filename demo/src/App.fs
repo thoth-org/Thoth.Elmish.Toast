@@ -23,48 +23,49 @@ module CopyButton =
         ofImport "default" "./js/CopyButton.js" (keyValueList CaseRules.LowerFirst props) []
 
 let renderToastWithFulma =
-        { new Toast.IRenderer<Fa.IconOption> with
-            member __.Toast children color =
-                Notification.notification [ Notification.CustomClass color ]
-                    children
+    { new Toast.IRenderer<Fa.IconOption> with
+        member __.Toast children color =
+            Notification.notification [ Notification.CustomClass color ]
+                children
 
-            member __.CloseButton onClick =
-                Notification.delete [ Props [ OnClick onClick ] ]
-                    [ ]
+        member __.CloseButton onClick =
+            Notification.delete [ Props [ OnClick onClick ] ]
+                [ ]
 
-            member __.Title txt =
-                Heading.h5 []
-                           [ str txt ]
+        member __.Title txt =
+            Heading.h5 []
+                       [ str txt ]
 
-            member __.Icon (icon : Fa.IconOption) =
-                Icon.icon [ Icon.Size IsMedium ]
-                    [ Fa.i [ icon
-                             Fa.Size Fa.Fa2x ]
-                        [ ] ]
+        member __.Icon (icon : Fa.IconOption) =
+            Icon.icon [ Icon.Size IsMedium ]
+                [ Fa.i [ icon
+                         Fa.Size Fa.Fa2x ]
+                    [ ] ]
 
-            member __.SingleLayout title message =
-                div [ ]
-                    [ title; message ]
+        member __.SingleLayout title message =
+            div [ ]
+                [ title; message ]
 
-            member __.Message txt =
-                span [ ]
-                     [ str txt ]
+        member __.Message txt =
+            span [ ]
+                 [ str txt ]
 
-            member __.SplittedLayout iconView title message =
-                Columns.columns [ Columns.IsGapless
-                                  Columns.IsVCentered ]
-                    [ Column.column [ Column.Width (Screen.All, Column.Is2) ]
-                        [ iconView ]
-                      Column.column [ ]
-                        [ title
-                          message ] ]
+        member __.SplittedLayout iconView title message =
+            Columns.columns [ Columns.IsGapless
+                              Columns.IsVCentered ]
+                [ Column.column [ Column.Width (Screen.All, Column.Is2) ]
+                    [ iconView ]
+                  Column.column [ ]
+                    [ title
+                      message ] ]
 
-            member __.StatusToColor status =
-                match status with
-                | Toast.Success -> "is-success"
-                | Toast.Warning -> "is-warning"
-                | Toast.Error -> "is-danger"
-                | Toast.Info -> "is-info" }
+        member __.StatusToColor status =
+            match status with
+            | Toast.Success -> "is-success"
+            | Toast.Warning -> "is-warning"
+            | Toast.Error -> "is-danger"
+            | Toast.Info -> "is-info"
+    }
 
 type State =
     | Initial
@@ -444,12 +445,7 @@ let private viewBuilder (model : Model) dispatch =
                         (checkradioPositions model.Position dispatch) ] ] ]
           Columns.columns [ Columns.IsMultiline
                             Columns.Props [ Style [ WhiteSpace WhiteSpaceOptions.Nowrap ] ] ]
-             [
-            //    Column.column [ ]
-            //     [ Switch.switch [ Switch.Checked model.WithProgressBar
-            //                       Switch.OnChange (fun _ -> dispatch ToggleWithProgressBar) ]
-            //         [ str "With progress bar" ] ]
-               Column.column [ ]
+             [ Column.column [ ]
                 [ Switch.switch [ Switch.Checked model.WithCloseButton
                                   Switch.Id "with-close-button"
                                   Switch.OnChange (fun _ -> dispatch ToggleWithCloseButton) ]
