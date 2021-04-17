@@ -37,7 +37,6 @@ type Position =
 | `Toast.message` | Create a toast and set the message content |
 | `Toast.title` | Set the title content |
 | `Toast.position` | Set the position |
-| `Toast.addInput` | Add an input to the toast |
 | `Toast.icon` | Set the icon |
 | `Toast.timeout` | Set the timeout in seconds |
 | `Toast.noTimeout` | No timeout, make sure to add a close button or dismiss on click |
