@@ -6,6 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 3.0.0 - 2021-04-17
+
+### Removed
+
+* Remove the `Toast.addInput` API.
+
+    It was never really supported and the implementation doesn't fill solied
+
+* Remove properties and code related to `ProgressBar`.
+
+    It was never released and was just some relicat from experimentation
+
+### Changed
+
+* Update all the doc comments to use XML style doc comments
+* Format the library code using my new formatting style
+* Remove unnecessary `boxing` and `option` type when creating the event to dispatch
+* Use a literal string for the passing the event name
+
 ### Added
 
 ## 2.1.0 - 2019-09-10
