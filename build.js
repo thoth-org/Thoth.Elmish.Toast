@@ -170,9 +170,9 @@ const generateNugetPackageAndPublishIt = async () => {
 
         const nugetPackagePath = resolve("src", "bin", "Release", `${packageName}.${newVersion}.nupkg`)
 
-        // shell.exec(
-        //     `dotnet nuget push -s nuget.org -k ${NUGET_KEY} ${nugetPackagePath}`
-        // )
+        shell.exec(
+            `dotnet nuget push -s nuget.org -k ${NUGET_KEY} ${nugetPackagePath}`
+        )
 
         log(success(`Nuget package published successfully`))
 
@@ -193,7 +193,7 @@ const generateNugetPackageAndPublishIt = async () => {
             owner: "thoth-org",
             repo: "Thoth.Elmish.Toast",
             tag_name: newVersion,
-            target_commitish: main,
+            target_commitish: "main",
             name: newVersion,
             body: versionInfo.body,
             prerelease: isPrerelease
@@ -211,15 +211,15 @@ const generateNugetPackageAndPublishIt = async () => {
 
 
 const publishHandler = async (argv) => {
-    // demoBuildHandler()
+    demoBuildHandler()
 
     // If user didn't ask only for the demo to be published
     if (!argv.demoOnly) {
         await generateNugetPackageAndPublishIt()
     }
 
-    // // Publish the demo on Github Pages
-    // await ghpagesPublisPromise(resolve("demo", "output"))
+    // Publish the demo on Github Pages
+    await ghpagesPublisPromise(resolve("demo", "output"))
 
 }
 
