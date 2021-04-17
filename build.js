@@ -8,8 +8,7 @@ var shell = require("shelljs")
 const path = require("path")
 const fs = require("fs").promises
 const parseChangelog = require('changelog-parser')
-const ghpages = require('gh-pages');
-const ghrelease = require('gh-release')
+const { Octokit } = require("@octokit/rest");
 
 const info = chalk.blueBright
 const warn = chalk.yellow
@@ -42,19 +41,6 @@ const shellExecInDemoProject = (command) => {
             cwd: demoProjectPath
         }
     )
-}
-
-
-const ghpagesPublisPromise = (path, options) => {
-    return new Promise((resolve, reject) => {
-        ghpages.publish(path, config, (err) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve()
-            }
-        })
-    })
 }
 
 const ghreleasePromise = (options) => {
@@ -184,9 +170,9 @@ const generateNugetPackageAndPublishIt = async () => {
 
         const nugetPackagePath = resolve("src", "bin", "Release", `${packageName}.${newVersion}.nupkg`)
 
-        shell.exec(
-            `dotnet nuget push -s nuget.org -k ${NUGET_KEY} ${nugetPackagePath}`
-        )
+        // shell.exec(
+        //     `dotnet nuget push -s nuget.org -k ${NUGET_KEY} ${nugetPackagePath}`
+        // )
 
         log(success(`Nuget package published successfully`))
 
@@ -198,22 +184,27 @@ const generateNugetPackageAndPublishIt = async () => {
         //  - 1.0.0-alpha-002
         const isPrerelease = newVersion.indexOf("-") === - 1 ? false : true;
 
-        await ghreleasePromise({
-            tag_name: `${newVersion}`,
-            target_commitish: "main",
-            name: `${newVersion}`,
-            body: versionInfo.body,
-            prerelease: isPrerelease,
-            repo: "Thoth.Elmish.Toast",
+        const octokit = new Octokit({
+            auth : GITHUB_TOKEN,
+            userAgent : 'Thoth.Elmish.Toast deployment script'
+        })
+
+        await octokit.rest.repos.createRelease({
             owner: "thoth-org",
-            token: GITHUB_TOKEN
+            repo: "Thoth.Elmish.Toast",
+            tag_name: newVersion,
+            target_commitish: main,
+            name: newVersion,
+            body: versionInfo.body,
+            prerelease: isPrerelease
         })
 
     } catch (e) {
-        log(error(`Something went wrong while publish`))
+        log(error(`Something went wrong while publishing`))
         log("Reverting changes made to the files")
         await fs.writeFile(projectFsprojPath, projectFsprojConent)
         log("Revert done")
+        log(e)
         process.exit(1)
     }
 }
