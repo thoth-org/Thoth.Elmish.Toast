@@ -16,7 +16,8 @@ module Toast =
     importSideEffects "./css/toast-base.css"
     importSideEffects "./css/toast-minimal.css"
 
-    let eventIdentifier = "thoth_elmish_toast_notify_event"
+    [<Literal>]
+    let private EVENT_IDENTIFIER = "thoth_elmish_toast_notify_event"
 
     type Status =
         | Success
@@ -184,7 +185,7 @@ module Toast =
                     }
             )
 
-        let event = CustomEvent.Create(eventIdentifier, detail)
+        let event = CustomEvent.Create(EVENT_IDENTIFIER, detail)
 
         window.dispatchEvent(event)
         |> ignore
@@ -476,16 +477,16 @@ module Toast =
                 #if DEBUG
                 if not (isNull hotModule) then
                     if hotModule?status() <> "idle" then
-                        window.removeEventListener(eventIdentifier, !!window?(eventIdentifier))
+                        window.removeEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
 
-                    window?(eventIdentifier) <- fun (ev : Event) ->
+                    window?(EVENT_IDENTIFIER) <- fun (ev : Event) ->
                         let ev = ev :?> CustomEvent
                         dispatch (Add (unbox ev.detail))
 
-                    window.addEventListener(eventIdentifier, !!window?(eventIdentifier))
+                    window.addEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
                 else
                 #endif
-                    window.addEventListener(eventIdentifier, fun ev ->
+                    window.addEventListener(EVENT_IDENTIFIER, fun ev ->
                         let ev = ev :?> CustomEvent
                         dispatch (Add (unbox ev.detail))
                     )
