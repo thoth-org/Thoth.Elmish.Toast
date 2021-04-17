@@ -9,6 +9,7 @@ const path = require("path")
 const fs = require("fs").promises
 const parseChangelog = require('changelog-parser')
 const { Octokit } = require("@octokit/rest");
+const ghpages = require("gh-pages")
 
 const info = chalk.blueBright
 const warn = chalk.yellow
@@ -43,13 +44,13 @@ const shellExecInDemoProject = (command) => {
     )
 }
 
-const ghreleasePromise = (options) => {
+const ghpagesPublishPromise = (path, config) => {
     return new Promise((resolve, reject) => {
-        ghrelease(options, (err, result) => {
+        ghpages.publish(path, config, (err) => {
             if (err) {
                 reject(err)
             } else {
-                resolve(result)
+                resolve()
             }
         })
     })
@@ -219,7 +220,7 @@ const publishHandler = async (argv) => {
     }
 
     // Publish the demo on Github Pages
-    await ghpagesPublisPromise(resolve("demo", "output"))
+    await ghpagesPublishPromise(resolve("demo", "output"))
 
 }
 
