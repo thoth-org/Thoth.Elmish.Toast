@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Toast encapsulation program for your Elmish application</Description>
     <PackageProjectUrl>https://github.com/MangelMaxime/Thoth</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/MangelMaxime/Thoth/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/MangelMaxime/Thoth</RepositoryUrl>
     <PackageTags>fable;fsharp;json</PackageTags>
     <Authors>Maxime Mangel</Authors>
@@ -12,17 +12,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Toast.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="3.2.6" />
-    <PackageReference Include="Fable.Elmish" Version="3.1.0" />
-    <PackageReference Include="Fable.Promise" Version="2.2.0" />
-    <PackageReference Include="Fable.React" Version="7.3.0" />
+    <PackageReference Include="Fable.Core" Version="3.0.0" />
+    <PackageReference Include="Fable.Elmish" Version="3.0.0" />
+    <PackageReference Include="Fable.Promise" Version="2.0.0" />
+    <PackageReference Include="Fable.React" Version="5.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="*.fsproj; **\*.fs; **\*.js; **\*.css" PackagePath="fable" />
+    <Content Include="*.fsproj; **\*.fs; **\*.css" PackagePath="fable" />
+    <None Include="../LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
   </ItemGroup>
 </Project>
