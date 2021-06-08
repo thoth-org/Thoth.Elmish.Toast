@@ -168,11 +168,11 @@ module Toast =
             WithCloseButton = true
         }
 
-    let private triggerEvent (builder : Builder<'icon, 'msg>) status dispatch =
+    let private triggerEvent<'a> (builder : Builder<'icon, 'msg>) status dispatch =
         let detail =
-            jsOptions<CustomEventInit>(fun o ->
+            jsOptions<CustomEventInit<_>>(fun o ->
                 o.detail <-
-                    {
+                    Some {
                         Guid = Guid.NewGuid()
                         Message = builder.Message
                         Title = builder.Title
@@ -480,14 +480,14 @@ module Toast =
                         window.removeEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
 
                     window?(EVENT_IDENTIFIER) <- fun (ev : Event) ->
-                        let ev = ev :?> CustomEvent
+                        let ev = ev :?> CustomEvent<_>
                         dispatch (Add (unbox ev.detail))
 
                     window.addEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
                 else
                 #endif
                     window.addEventListener(EVENT_IDENTIFIER, fun ev ->
-                        let ev = ev :?> CustomEvent
+                        let ev = ev :?> CustomEvent<_>
                         dispatch (Add (unbox ev.detail))
                     )
 
