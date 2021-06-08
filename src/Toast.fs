@@ -168,22 +168,22 @@ module Toast =
             WithCloseButton = true
         }
 
-    let private triggerEvent<'a> (builder : Builder<'icon, 'msg>) status dispatch =
+    let inline private triggerEvent<'icon, 'msg> (builder : Builder<'icon, 'msg>) status (dispatch : Dispatch<'msg>) =
+        let value : option<Toast<'icon>> =
+            Some {
+                    Guid = Guid.NewGuid()
+                    Message = builder.Message
+                    Title = builder.Title
+                    Icon = builder.Icon
+                    Position = builder.Position
+                    Delay = builder.Delay
+                    Status = status
+                    DismissOnClick = builder.DismissOnClick
+                    WithCloseButton = builder.WithCloseButton
+                }
+
         let detail =
-            jsOptions<CustomEventInit<_>>(fun o ->
-                o.detail <-
-                    Some {
-                        Guid = Guid.NewGuid()
-                        Message = builder.Message
-                        Title = builder.Title
-                        Icon = builder.Icon
-                        Position = builder.Position
-                        Delay = builder.Delay
-                        Status = status
-                        DismissOnClick = builder.DismissOnClick
-                        WithCloseButton = builder.WithCloseButton
-                    }
-            )
+            jsOptions<CustomEventInit<Toast<'icon>>>(fun o -> o.detail <- value)
 
         let event = CustomEvent.Create(EVENT_IDENTIFIER, detail)
 
@@ -469,7 +469,7 @@ module Toast =
                 }
                 , cmd
 
-            let notificationEvent (dispatch : Elmish.Dispatch<Notifiable<_, _>>) =
+            let notificationEvent (dispatch : Elmish.Dispatch<Notifiable<'icon, 'msg>>) =
                 // If HMR support is active, then we provide have a custom implementation.
                 // This is needed to avoid:
                 // - flickering (trigger several react renderer process)
@@ -480,14 +480,14 @@ module Toast =
                         window.removeEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
 
                     window?(EVENT_IDENTIFIER) <- fun (ev : Event) ->
-                        let ev = ev :?> CustomEvent<_>
+                        let ev = ev :?> CustomEvent<Notifiable<'icon, 'msg>>
                         dispatch (Add (unbox ev.detail))
 
                     window.addEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
                 else
                 #endif
                     window.addEventListener(EVENT_IDENTIFIER, fun ev ->
-                        let ev = ev :?> CustomEvent<_>
+                        let ev = ev :?> CustomEvent<Notifiable<'icon, 'msg>>
                         dispatch (Add (unbox ev.detail))
                     )
 
