@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 
 const isGitpod = process.env.GITPOD_WORKSPACE_ID != null
 
+// Detect isProd
+const isProd = process.env.NODE_ENV === 'production'
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
@@ -15,5 +18,6 @@ export default defineConfig({
         hmr: {
             clientPort: isGitpod ? 443 : undefined,
         }
-    }
+    },
+    base: isProd ? "/Thoth.Elmish.Toast/" : "/",
 })
