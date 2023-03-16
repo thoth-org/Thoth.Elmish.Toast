@@ -10,9 +10,6 @@ module Toast =
     open Browser.Types
     open Elmish
 
-    [<Fable.Core.Emit("module.hot")>]
-    let private hotModule = obj()
-
     importSideEffects "./css/toast-base.css"
     importSideEffects "./css/toast-minimal.css"
 
@@ -167,10 +164,10 @@ module Toast =
         { builder with
             WithCloseButton = true
         }
-
+ 
     let private triggerEvent (builder : Builder<'icon, 'msg>) status dispatch =
         let detail =
-            jsOptions<CustomEventInit>(fun o ->
+            jsOptions<CustomEventInit<_>>(fun o ->
                 o.detail <-
                     {
                         Guid = Guid.NewGuid()
@@ -183,6 +180,7 @@ module Toast =
                         DismissOnClick = builder.DismissOnClick
                         WithCloseButton = builder.WithCloseButton
                     }
+                    |> Some
             )
 
         let event = CustomEvent.Create(EVENT_IDENTIFIER, detail)
@@ -428,7 +426,7 @@ module Toast =
                         { model with UserModel = newModel }, Cmd.map UserMsg cmd
 
                     | Add newToast ->
-                        let cmd : Cmd<Notifiable<'icon, 'msg>>=
+                        let cmd : Cmd<Notifiable<'icon, 'msg>> =
                             match newToast.Delay with
                             | Some _ -> Cmd.OfPromise.either delayedCmd newToast Remove !!OnError // TODO: Fix elmish
                             | None -> Cmd.none
@@ -469,35 +467,34 @@ module Toast =
                 }
                 , cmd
 
-            let notificationEvent (dispatch : Elmish.Dispatch<Notifiable<_, _>>) =
-                // If HMR support is active, then we provide have a custom implementation.
-                // This is needed to avoid:
-                // - flickering (trigger several react renderer process)
-                // - attaching several event listener to the same event
-                #if DEBUG
-                if not (isNull hotModule) then
-                    if hotModule?status() <> "idle" then
-                        window.removeEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
+            let onNotificationRef : (Event -> unit) ref =
+                fun _ ->
+                    failwith "`onNotificationRef` has not been initialized.\nThis should not happen, please open an issue on Thoth.Elmish.Toast if the problem persist"
+                |> ref
 
-                    window?(EVENT_IDENTIFIER) <- fun (ev : Event) ->
-                        let ev = ev :?> CustomEvent
+            let notificationEvent (dispatch : Elmish.Dispatch<Notifiable<'icon, _>>) =
+                let onNotification = 
+                    fun (ev : Event) ->
+                        let ev = ev :?> CustomEvent<Toast<'icon>>
                         dispatch (Add (unbox ev.detail))
+                
+                onNotificationRef.Value <- onNotification
 
-                    window.addEventListener(EVENT_IDENTIFIER, !!window?(EVENT_IDENTIFIER))
-                else
-                #endif
-                    window.addEventListener(EVENT_IDENTIFIER, fun ev ->
-                        let ev = ev :?> CustomEvent
-                        dispatch (Add (unbox ev.detail))
-                    )
+                window.addEventListener(EVENT_IDENTIFIER, onNotificationRef.Value)
+
+                { new IDisposable with
+                    member __.Dispose() =
+                        window.removeEventListener(EVENT_IDENTIFIER, onNotificationRef.Value)
+                }
 
             let mapInit init =
                 init >> (fun (model, cmd) ->
                             model, cmd |> Cmd.map UserMsg) >> createModel
 
-            let mapSubscribe subscribe model =
-                Cmd.batch [ [ notificationEvent ]
-                            subscribe model.UserModel |> Cmd.map UserMsg ]
+            let mapSubscribe userSubscribe model =
+                Sub.batch
+                    [ [ [ EVENT_IDENTIFIER ], notificationEvent ]
+                      userSubscribe model.UserModel |> Sub.map "ThothElmishToastUser" UserMsg ]
 
             let mapView view' model dispatch =
                 fragment [ ]
@@ -507,7 +504,20 @@ module Toast =
             let mapSetState setState model dispatch =
                 setState model.UserModel (UserMsg >> dispatch)
 
-            Program.map mapInit mapUpdate mapView mapSetState mapSubscribe program
+            let mapTermination (predicate,terminate) =
+                let predicate' =
+                    function
+                    | UserMsg msg -> predicate msg
+                    | _ -> false
+
+                let terminate' model =
+                    window.removeEventListener(EVENT_IDENTIFIER, onNotificationRef.Value)
+
+                    terminate model.UserModel
+
+                predicate', terminate'
+             
+            Program.map mapInit mapUpdate mapView mapSetState mapSubscribe mapTermination program
 
     /// <summary>
     /// Default implementation for the Toast renderer.

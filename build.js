@@ -18,7 +18,7 @@ const success = chalk.green
 const log = console.log
 const resolve = (...args) => path.resolve(__dirname, ...args)
 
-const demoProjectPath = resolve("demo")
+const demoProjectPath = resolve("demo", "src")
 const packageName = "Thoth.Elmish.Toast"
 
 // Make shellsjs throw if there is an error in a command
@@ -57,25 +57,30 @@ const ghpagesPublishPromise = (path, config) => {
 }
 
 const demoClean = () => {
-    shell.rm("-rf", resolve("demo", "fableBuild"))
+    shell.rm("-rf", resolve("demo", "src", "fableBuild"))
     shell.rm("-rf", resolve("demo", "src", "obj"))
     shell.rm("-rf", resolve("demo", "src", "bin"))
-    shell.rm("-rf", resolve("demo", "output"))
+    shell.rm("-rf", resolve("demo", "src", "dist"))
 }
 
 const demoWatchHandler = async () => {
     demoClean()
 
-    shellExecInDemoProject("npm install")
+    shell.exec(
+        "npm install",
+        {
+            cwd: resolve("demo")
+        }
+    )
 
     await concurrently(
         [
             {
-                command: "npx webpack serve --mode development",
+                command: "npx vite",
                 cwd: demoProjectPath
             },
             {
-                command: "dotnet fable src/Demo.fsproj --outDir fableBuild --watch",
+                command: "dotnet fable Demo.fsproj --outDir fableBuild --watch",
                 cwd: demoProjectPath
             }
         ],
@@ -88,11 +93,16 @@ const demoWatchHandler = async () => {
 const demoBuildHandler = async () => {
     demoClean()
 
-    shellExecInDemoProject("npm install")
+    shell.exec(
+        "npm install",
+        {
+            cwd: resolve("demo")
+        }
+    )
 
-    shellExecInDemoProject("dotnet fable src/Demo.fsproj --outDir fableBuild")
+    shellExecInDemoProject("dotnet fable Demo.fsproj --outDir fableBuild")
 
-    shellExecInDemoProject("npx webpack --mode production")
+    shellExecInDemoProject("npx vite build")
 }
 
 const generateNugetPackageAndPublishIt = async () => {
@@ -220,7 +230,7 @@ const publishHandler = async (argv) => {
     }
 
     // Publish the demo on Github Pages
-    await ghpagesPublishPromise(resolve("demo", "output"))
+    await ghpagesPublishPromise(resolve("demo", "src", "dist"))
 
 }
 

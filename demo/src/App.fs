@@ -20,7 +20,7 @@ module CopyButton =
         | Value of string
 
     let inline copyButtton (props: Props list) : ReactElement =
-        ofImport "default" "./js/CopyButton.js" (keyValueList CaseRules.LowerFirst props) []
+        ofImport "default" "./js/CopyButton.jsx" (keyValueList CaseRules.LowerFirst props) []
 
 let renderToastWithFulma =
     { new Toast.IRenderer<Fa.IconOption> with
@@ -132,7 +132,7 @@ let private init _ =
       NoTimeOut  = false
       GlobalError = ""
       Code = ""
-      Renderer = renderer }, Cmd.OfFunc.result ShowToast
+      Renderer = renderer }, Cmd.ofMsg ShowToast
 
 type Step =
     { Model : Model
@@ -239,19 +239,19 @@ let private update msg model =
                 |> Toast.error
 
     | ChangePosition newPosition ->
-        { model with Position = newPosition }, Cmd.OfFunc.result RefreshCode
+        { model with Position = newPosition }, Cmd.ofMsg RefreshCode
 
     | ChangeStatus newStatus ->
-        { model with Status = newStatus }, Cmd.OfFunc.result RefreshCode
+        { model with Status = newStatus }, Cmd.ofMsg RefreshCode
 
     | ChangeMessage newMessage ->
-        { model with Message = newMessage }, Cmd.OfFunc.result RefreshCode
+        { model with Message = newMessage }, Cmd.ofMsg RefreshCode
 
     | ChangeTitle newTitle ->
-        { model with Title = newTitle }, Cmd.OfFunc.result RefreshCode
+        { model with Title = newTitle }, Cmd.ofMsg RefreshCode
 
     | ChangeIcon newIcon ->
-        { model with Icon = newIcon }, Cmd.OfFunc.result RefreshCode
+        { model with Icon = newIcon }, Cmd.ofMsg RefreshCode
 
     | ChangeDelay newDelay ->
         let errorMsg =
@@ -262,19 +262,19 @@ let private update msg model =
                 | _ -> "Invalid float value"
 
         { model with Delay = newDelay
-                     DelayError = errorMsg }, Cmd.OfFunc.result RefreshCode
+                     DelayError = errorMsg }, Cmd.ofMsg RefreshCode
 
     | ToggleDismissOnClick ->
-        { model with DismissOnClick = not model.DismissOnClick }, Cmd.OfFunc.result RefreshCode
+        { model with DismissOnClick = not model.DismissOnClick }, Cmd.ofMsg RefreshCode
 
     | ToggleWithProgressBar ->
-        { model with WithProgressBar = not model.WithProgressBar }, Cmd.OfFunc.result RefreshCode
+        { model with WithProgressBar = not model.WithProgressBar }, Cmd.ofMsg RefreshCode
 
     | ToggleWithCloseButton ->
-        { model with WithCloseButton = not model.WithCloseButton }, Cmd.OfFunc.result RefreshCode
+        { model with WithCloseButton = not model.WithCloseButton }, Cmd.ofMsg RefreshCode
 
     | ToggleNoTimeOut ->
-        { model with NoTimeOut = not model.NoTimeOut }, Cmd.OfFunc.result RefreshCode
+        { model with NoTimeOut = not model.NoTimeOut }, Cmd.ofMsg RefreshCode
 
     | ShowToast ->
         if not model.NoTimeOut && model.DelayError <> "" then
@@ -370,7 +370,7 @@ let private timeoutHelper (model : Model) =
     | false ->
       Help.help [ Help.Color IsDanger ]
         [ str model.DelayError ]
-
+ 
 let private viewCode (model : Model) =
     Column.column [ Column.Width (Screen.Tablet, Column.Is5) ]
         [ Text.div [ Modifiers [ Modifier.TextAlignment (Screen.Tablet, TextAlignment.Centered) ] ]

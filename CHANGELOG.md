@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 4.0.0 - 2023-03-16
+
+### Changed
+
+* Update to Elmish 4.0
+
 ## 3.0.0 - 2021-04-17
 
 ### Removed
